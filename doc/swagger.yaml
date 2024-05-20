@@ -1,0 +1,117 @@
+openapi: 3.0.3
+info:
+  title: API - Autenticação por JWT
+  description: O sistema permitir aos usuários, como professores e administradores, gerenciar informações sobre alunos, cursos, notas, horários de aula e matrículas.  O usuário cadastrado no banco de dados, faz o login usando e-mail e senha, recebendo um token JWT com expiração de 5 minutos.
+  contact:
+    email: joaoeduardo.lima@hotmail.com
+  license:
+    name: GPL
+    url: https://www.gnu.org/licenses/gpl-3.0.html
+  version: 1.0.0
+servers:
+  - url: http://localhost:3010
+tags:
+  - name: Login
+    description: Faz a autenticação do usúario. 
+  - name: Cadastro de Aluno
+    description: Atualização, Cadastro e Consulta de Alunos.
+  - name: Logout
+    description: Impede que o usúario continue navegando nas rotas.
+paths:
+  /login:
+    post:
+      tags:
+        - Login
+      summary: Logar com email e senha
+      requestBody:
+        description: User cadastradado para teste.
+        content:
+         application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Login'
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ok'
+        '401':
+          description: Não autorizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NOk'
+  /api/v1:
+    get:
+      tags:
+       - Cadastro de Aluno
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ok'
+        '401':
+          description: Não autorizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NOk'
+      security: 
+        - bearerAuth: []
+  /api/v1/logout:
+    post:
+      tags:
+       - Logout
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ok'
+        '401':
+          description: Não autorizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NOk'
+      security: 
+        - bearerAuth: []
+components:
+  schemas:
+    Ok:
+      type: object
+      properties:
+        msg:
+          type: string
+          example: "Ok"
+    NOk:
+      type: object
+      properties:
+        msg:
+          type: string
+          example: "Não autorizado"
+    Login:
+      required: 
+      - login
+      - senha
+      type: object
+      properties:
+        login:
+          type: string
+          enum: 
+          - admin@exemplo.com
+          - emailInvalido@exemplo.com
+        senha:
+          type: string
+          enum:
+          - senhaAdmin
+          - senhaInvalido
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

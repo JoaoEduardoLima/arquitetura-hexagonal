@@ -1,0 +1,39 @@
+version: '3.8'
+services:
+  db:
+    image: cassandra:5.0
+    container_name: db-cassandra
+    restart: always
+    ports:
+      - "9042:9042"
+    environment:
+      CASSANDRA_CLUSTER_NAME: app
+      CASSANDRA_BROADCAST_ADDRESS: host.docker.internal
+    volumes:
+      - ./cassandra:/var/lib/cassandra
+    healthcheck:
+      test: ["CMD", "cqlsh", "-e", "DESCRIBE KEYSPACES"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+  
+  migrate:
+    container_name: migrate
+    image: cassandra:5.0
+    depends_on:
+      db:
+        condition: service_healthy
+    command: "cqlsh db-cassandra -f /var/lib/cassandra/migrate.cql"
+    volumes:
+      - ./cassandra:/var/lib/cassandra
+
+  swagger-editor:
+    container_name: swagger-editor
+    image: swaggerapi/swagger-editor
+    ports:
+      - "80:80"
+    volumes:
+      - ./doc:/temp   
+    environment:
+      - PORT=80
+      - SWAGGER_FILE=/temp/swagger.yaml
