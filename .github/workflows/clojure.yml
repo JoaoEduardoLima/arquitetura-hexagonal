@@ -18,6 +18,8 @@ jobs:
       run: lein deps
     - name: Run tests
       run: lein test
+    - name: Generate coverage report
+      run: lein cloverage --codecov
       
   sonarcloud:
     name: SonarCloud
