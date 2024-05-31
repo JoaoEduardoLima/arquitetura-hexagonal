@@ -13,7 +13,11 @@
                  [ring/ring-jetty-adapter "1.8.2"]
                  [ring/ring-json "0.5.0"]
                  [jumblerg/ring-cors "3.0.0"]]
-  :plugins [[lein-cloverage "1.2.2"]]
+  :plugins [[jonase/eastwood "0.3.13"]
+            [lein-kibit "0.1.8"]
+            [lein-ancient "0.6.15"]
+            [lein-cloverage "1.1.2"]
+            [lein-nvd "1.4.0"]]
   :cloverage {:ns-regex [#"^core.domain.*"]}
   :main ^:skip-aot adapter.driver.api.server
   :target-path "target/%s"
