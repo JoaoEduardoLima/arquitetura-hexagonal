@@ -14,6 +14,7 @@
                  [ring/ring-json "0.5.0"]
                  [jumblerg/ring-cors "3.0.0"]]
   :plugins [[lein-cloverage "1.2.2"]]
+  :cloverage {:ns-regex [#"^core.domain.*"]}
   :main ^:skip-aot adapter.driver.api.server
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all
