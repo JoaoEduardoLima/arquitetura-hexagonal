@@ -18,4 +18,4 @@
           logout? (logout? (:jti token-decoded))]
       (if (and token-decoded (not logout?))
         (handler req)
-        (handler-401 req)))))
+        (handler-401)))))
